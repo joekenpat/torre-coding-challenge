@@ -1,0 +1,19 @@
+.white {
+    border: 0;
+    background-color: rgb(246 250 255);
+    border-top-left-radius: 1em !important;
+    border-bottom-left-radius: 1em !important;
+  }
+  .remove_lb {
+    border-left: 0;
+    border: 0;
+    font-size: .85em !important;
+    padding: .2em  !important;
+    background-color: rgb(246 250 255);
+    border-top-right-radius: 1em !important;
+    border-bottom-right-radius: 1em !important;
+  }
+  .remove_lb:focus {
+    box-shadow: none;
+    background-color: rgb(246 250 255);
+  }
