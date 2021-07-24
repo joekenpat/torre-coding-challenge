@@ -7,8 +7,51 @@ import Aggregator from "../models/Aggregator";
 const searchData = ({ type, value }) => {
   if (type === "skill") {
     return { skill: { term: value, experience: "1-plus-year" } };
-  }else if(type==="compensationrange"){
-
+  } else if (type === "compensationrange") {
+    let data = {
+      compensationrange: {
+        minAmount: 0,
+        maxAmount: 10,
+        currency: "USD$",
+        periodicity: "hourly",
+      },
+    };
+    let [range, period] = value.substr(4).split("/");
+    if (range.includes("-")) {
+      data = {
+        compensationrange: {
+          minAmount: range.split("-")[0],
+          maxAmount: range.split("-")[1],
+          currency: "USD$",
+          periodicity: period,
+        },
+      };
+    } else {
+      data = {
+        compensationrange: {
+          minAmount: range.replace(">", "").replace(" ", ""),
+          currency: "USD$",
+          periodicity: period,
+        },
+      };
+    }
+    return data;
+  } else if (type === "remoter") {
+    return {
+      remoter: {
+        term: value === "yes",
+      },
+    };
+  } else if (type === "opento") {
+    return {
+      opento: { term: value },
+    };
+  } else {
+    return {
+      name: {
+        term: value,
+      },
+    };
   }
 };
 
@@ -22,15 +65,25 @@ export default function SearchBox() {
   };
   const [aggregatorValue, setAggregatorValue] = useState([]);
   const [searchFilter, setSearchFilter] = useState({ type: "", value: "" });
+  const handleFilterBy = (selected) => {
+    setSearchFilter({ type: selected, value: "" });
+  };
+  const handleFilterValue = (selected) => {
+    setSearchFilter({ ...searchFilter, value: selected });
+  };
   useEffect(() => {
     if (!searchFilter.type) {
       return;
     }
     setAggregatorValue(Aggregator[searchFilter.type].map((x) => x.value));
   }, [searchFilter.type]);
-  const handleFilterBy = (selected) => {
-    setSearchFilter({ ...searchFilter, type: selected });
-  };
+
+  useEffect(() => {
+    if (!searchFilter.value) {
+      return;
+    }
+    console.log(searchData({ ...searchFilter }));
+  }, [searchFilter.value, searchFilter]);
   return (
     <div>
       <InputGroup className="mb-2">
@@ -46,9 +99,9 @@ export default function SearchBox() {
         <Row className={`g-1`}>
           <Col>
             <Form.Select
-              value={searchFilter.value}
-              className={`${ls.custom_left}`}
+              value={searchFilter.type}
               onChange={(x) => handleFilterBy(x.target.value)}
+              className={`${ls.custom_left}`}
             >
               <option value="">Filter By</option>
               {aggregators.map((agg, i) => (
@@ -59,7 +112,11 @@ export default function SearchBox() {
             </Form.Select>
           </Col>
           <Col>
-            <Form.Select className={`${ls.custom_right}`}>
+            <Form.Select
+              value={searchFilter.value}
+              onChange={(e) => handleFilterValue(e.target.value)}
+              className={`${ls.custom_right}`}
+            >
               <option>Values</option>
               {aggregatorValue.map((aggV, i) => (
                 <option value={aggV} key={"aggV_" + i}>
