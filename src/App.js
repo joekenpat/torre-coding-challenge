@@ -40,7 +40,7 @@ function App() {
   // const onDismiss = () => setOpen(false);
   return (
     <div className={`${gs.main_app}`}>
-      <GoogleMapReact
+      {/* <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
         defaultCenter={initLocation.center}
         defaultZoom={initLocation.zoom}
@@ -48,7 +48,7 @@ function App() {
         onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
       >
         <Card body lat={59.955413} lng={30.337844} text="My Marker" />
-      </GoogleMapReact>
+      </GoogleMapReact> */}
       <BottomSheet
         open={open}
         // onDismiss={onDismiss}
