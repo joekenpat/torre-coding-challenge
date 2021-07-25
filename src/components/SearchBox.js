@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import { RiSearch2Line } from "react-icons/ri";
 import ls from "../css/SearchBox.module.css";
 
