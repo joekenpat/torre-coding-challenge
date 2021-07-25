@@ -26,11 +26,11 @@ select.custom_right:hover {
   background-color: rgb(255 242 238);
 }
 .filter_box {
-  background-color: rgb(255 242 238);
+  background-color: rgb(246 250 255);
   border-radius: 1em !important;
 }
 .filter_box select {
-  background-color: rgb(255 242 238);
+  background-color: rgb(246 250 255);
   border: 0;
 }
 .filter_box select:first-of-type {
@@ -41,13 +41,13 @@ select.custom_right:hover {
 .filter_box select:focus {
   border: 0;
   box-shadow: none !important;
-  background-color: rgb(255 242 238);
+  background-color: rgb(246 250 255);
 }
 
 .filter_button {
   color: rgb(255 136 69);
   border:0;
-  background-color: rgb(255 136 69);
+  background-color: #26396b;
   border-top-right-radius: 1em !important;
   border-bottom-right-radius: 1em !important;
 }

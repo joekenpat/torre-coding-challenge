@@ -1,22 +1,33 @@
 import React from "react";
+import { Card, Container } from "react-bootstrap";
 import MobileAccountListItem from "./MobileAccountListItem";
 
-const MobileAccountList = ({ accounts }) => {
+const MobileAccountList = ({ accounts, onItemClick, hidden = true }) => {
   return (
-    <div className="d-flex flex-column">
-      {Object.keys(accounts).length > 0
-        ? accounts.map(
-            ({ name, avatarUrl, compensation, headline, skills }) => (
-              <MobileAccountListItem
-                fullname={name}
-                avatarUrl={avatarUrl}
-                headline={headline}
-                compensation={compensation}
-                skills={skills}
-              />
-            )
+    <div className={`d-flex flex-column ${hidden ? "d-none" : ""}`}>
+      {Object.keys(accounts).length > 0 ? (
+        accounts.map(
+          (
+            { name, avatarUrl, compensation, headline, skills, username },
+            i
+          ) => (
+            <MobileAccountListItem
+              clickAction={onItemClick}
+              key={"mali_" + i}
+              fullname={name}
+              avatarUrl={avatarUrl}
+              headline={headline}
+              compensation={compensation}
+              username={username}
+              skills={skills}
+            />
           )
-        : "Select A filter to start"}
+        )
+      ) : (
+        <Container fluid>
+          <Card body>Loading...</Card>
+        </Container>
+      )}
     </div>
   );
 };

@@ -69,11 +69,12 @@ const prepareAccountsData = (data) => {
       remoteWorking: pd.remoter,
       username: pd.username,
       weight: pd.weight,
+      location: pd.locationName,
     }));
   return [];
 };
 
-export default function SearchBox({ sendAvailAccounts }) {
+export default function SearchBox({ sendAvailAccounts, hidden = false }) {
   const [loading, setLoading] = useState(false);
   const [aggregatorData, setAggregatorData] = useState({});
   const [aggregators, setAggregators] = useState(Object.keys(aggregatorData));
@@ -142,8 +143,8 @@ export default function SearchBox({ sendAvailAccounts }) {
   }, [searchFilter.type, aggregatorData]);
   useEffect(loadData, []);
   return (
-    <div>
-      <InputGroup className="mb-2">
+    <div className={`${hidden ? "d-none" : ""}`}>
+      {/* <InputGroup className="mb-2">
         <InputGroup.Text className={`${ls.custom_left}`}>
           <RiSearch2Line size={22} color="#26396b" />
         </InputGroup.Text>
@@ -151,7 +152,7 @@ export default function SearchBox({ sendAvailAccounts }) {
           className={`${ls.custom_right} ${ls.remove_lb}`}
           placeholder="Search for Programmers"
         />
-      </InputGroup>
+      </InputGroup> */}
       <Col className={`${ls.filter_box}`}>
         <InputGroup>
           <Form.Select

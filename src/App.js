@@ -1,22 +1,51 @@
 import GoogleMapReact from "google-map-react";
 import React, { useEffect, useState } from "react";
-import { Card, Container, ListGroup } from "react-bootstrap";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 import MobileAccountList from "./components/MobileAccountList";
 import SearchBox from "./components/SearchBox";
+import { RiMapPinUserFill } from "react-icons/ri";
 import gs from "./css/main.module.css";
+import GetUserDetail from "./misc/GetUserDetail";
+import ContactCard from "./components/ContactCard";
+import { useMediaQuery } from "react-responsive";
+// import GeocodeMultipleAddress from "./misc/GeocodeMultipleAddress";
 
-const handleApiLoaded = (map, maps) => {
-  // use map and maps objects
+const Desktop = ({ children }) => {
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+  return isDesktop ? children : null;
 };
+const Tablet = ({ children }) => {
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+  return isTablet ? children : null;
+};
+const Mobile = ({ children }) => {
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  return isMobile ? children : null;
+};
+
+// const handleApiLoaded = (map, maps) => {
+//   // use map and maps objects
+// };
 
 function App() {
   const [availAccounts, setAvailAccounts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [viewableAccount, setViewableAccount] = useState("");
+  const [viewableAccountData, setViewableAccountData] = useState({});
+  const goBack = () => {
+    setViewableAccount("");
+    setViewableAccountData({});
+  };
   const retrieveAvailAccounts = (accounts) => {
     setAvailAccounts([...accounts]);
+    // GeocodeMultipleAddress([...accounts.map((x) => x.location)]);
   };
-  const [open, setOpen] = useState(false);
+  const retrieveViewableAccount = (username) => {
+    console.log({ viewable: username });
+    setViewableAccount(username);
+    setViewableAccountData(GetUserDetail(username));
+  };
   const [initLocation, setInitLocation] = useState({
     center: {
       lat: 59.955413,
@@ -41,9 +70,38 @@ function App() {
   useEffect(() => {
     setOpen(true);
   }, []);
-  // const onDismiss = () => setOpen(false);
   return (
     <div className={`${gs.main_app}`}>
+      <Desktop>
+        <div className={`${gs.sideBarLeft}`}>
+          <div className="p-2">
+            <SearchBox
+              hidden={viewableAccount !== ""}
+              sendAvailAccounts={retrieveAvailAccounts}
+            />
+            {viewableAccount !== "" && (
+              <a href="/#" className="nav-link nav-item" onClick={goBack}>
+                Go Back
+              </a>
+            )}
+          </div>
+          <MobileAccountList
+            hidden={viewableAccount !== ""}
+            MobileAccountList
+            accounts={availAccounts}
+            onItemClick={retrieveViewableAccount}
+          />
+          <ContactCard
+            hidden={viewableAccount === ""}
+            fullname={viewableAccountData.name}
+            headline={viewableAccountData.headline}
+            stats={viewableAccountData.stats}
+            links={viewableAccountData.links}
+            remoteWorking={viewableAccountData.remoteWorking}
+          />
+        </div>
+      </Desktop>
+
       {/* <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
         defaultCenter={initLocation.center}
@@ -51,23 +109,50 @@ function App() {
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
       >
-        <Card body lat={59.955413} lng={30.337844} text="My Marker" />
+        <RiMapPinUserFill body lat={viewableAccountData.location.lat} lng={viewableAccountData.location.lng} size={24} />
       </GoogleMapReact> */}
-      <BottomSheet
-        open={open}
-        // onDismiss={onDismiss}
-        defaultSnap={({ maxHeight }) => maxHeight * 0.4}
-        snapPoints={({ maxHeight }) => [
-          maxHeight * 0.4,
-          maxHeight * 0.6,
-          maxHeight * 0.8,
-        ]}
-        expandOnContentDrag={true}
-        header={<SearchBox sendAvailAccounts={retrieveAvailAccounts} />}
-        blocking={false}
-      >
-        <MobileAccountList accounts={availAccounts} />
-      </BottomSheet>
+      <Mobile>
+        <BottomSheet
+          open={open}
+          // onDismiss={onDismiss}
+          defaultSnap={({ maxHeight }) => maxHeight * 0.4}
+          snapPoints={({ maxHeight }) => [
+            maxHeight * 0.4,
+            maxHeight * 0.6,
+            maxHeight * 0.8,
+          ]}
+          expandOnContentDrag={true}
+          header={
+            <div>
+              <SearchBox
+                hidden={viewableAccount !== ""}
+                sendAvailAccounts={retrieveAvailAccounts}
+              />
+              {viewableAccount !== "" && (
+                <a href="/#" className="nav-link nav-item" onClick={goBack}>
+                  Go Back
+                </a>
+              )}
+            </div>
+          }
+          blocking={false}
+        >
+          <MobileAccountList
+            hidden={viewableAccount !== ""}
+            MobileAccountList
+            accounts={availAccounts}
+            onItemClick={retrieveViewableAccount}
+          />
+          <ContactCard
+            hidden={viewableAccount === ""}
+            fullname={viewableAccountData.name}
+            headline={viewableAccountData.headline}
+            stats={viewableAccountData.stats}
+            links={viewableAccountData.links}
+            remoteWorking={viewableAccountData.remoteWorking}
+          />
+        </BottomSheet>
+      </Mobile>
     </div>
   );
 }

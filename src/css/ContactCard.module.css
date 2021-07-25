@@ -1,0 +1,42 @@
+.sab {
+  padding: 0.6em 1em 0.7em 1em;
+  border: 0.15em solid rgb(230 238 254);
+  color: rgb(37 58 113);
+}
+.sab:hover {
+  background-color: rgb(37 58 113);
+  border-color: rgb(37 58 113);
+}
+.thickBorder {
+  border: 0.13em solid rgb(230 238 254);
+  border-radius: 0.4em !important;
+}
+.contact_name {
+  color: rgb(37 58 113);
+}
+.mini_stat {
+  margin-left: 0.5em;
+}
+
+.mini_stat > p {
+  color: rgb(37 58 113);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.mini_stat_divider {
+  width: 0.1em;
+  border-radius: 2em;
+  background-color: rgb(230 238 254);
+}
+
+.mini_stat_icon {
+  background-color: rgb(230 238 254);
+  color: rgb(37 58 113);
+  border-radius: 0.4em;
+  padding: 0.5em;
+}
+
+.mini_stat_label {
+  font-size: 0.85em;
+  font-weight: 550;
+}

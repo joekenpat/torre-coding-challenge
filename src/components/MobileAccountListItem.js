@@ -7,8 +7,10 @@ const MobileAccountListItem = ({
   fullname,
   avatarUrl,
   compensation,
+  username,
   headline = "",
   skills = [],
+  clickAction,
 }) => {
   const periodicityMap = {
     yearly: "YR",
@@ -16,7 +18,11 @@ const MobileAccountListItem = ({
     hourly: "HR",
   };
   return (
-    <a href="/#" class="list-group-item list-group-item-action p-1">
+    <a
+      href="/#"
+      onClick={() => clickAction(username)}
+      className="list-group-item list-group-item-action p-1"
+    >
       <div className="d-flex justify-content-start">
         {avatarUrl ? (
           <Image

@@ -3,3 +3,18 @@
   width: 100%;
   background-color: gray;
 }
+
+.sideBarLeft {
+  min-width: 400px;
+  max-width: 400px;
+  color: rgb(125 141 181);
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  position: fixed;
+  overflow: auto;
+  z-index: 0;
+  height: 100vh;
+  border-right: 2px solid rgb(230 239 252);
+  background-color: #fff;
+}
