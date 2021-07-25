@@ -18,3 +18,10 @@
   border-right: 2px solid rgb(230 239 252);
   background-color: #fff;
 }
+
+.content {
+  display: block;
+  height: 100vh;
+  width: calc(100vw - 400px);
+  margin-left: 400px;
+}

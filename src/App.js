@@ -24,9 +24,9 @@ const Mobile = ({ children }) => {
   return isMobile ? children : null;
 };
 
-// const handleApiLoaded = (map, maps) => {
-//   // use map and maps objects
-// };
+const handleApiLoaded = (map, maps) => {
+  //   // use map and maps objects
+};
 
 function App() {
   const [availAccounts, setAvailAccounts] = useState([]);
@@ -59,7 +59,7 @@ function App() {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       },
-      zoom: 11,
+      zoom: 4,
     });
   };
   if (window.navigator.geolocation) {
@@ -100,18 +100,28 @@ function App() {
             remoteWorking={viewableAccountData.remoteWorking}
           />
         </div>
+        <div className={`${gs.content}`}>
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
+            defaultCenter={initLocation.center}
+            defaultZoom={initLocation.zoom}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          >
+            <RiMapPinUserFill body lat={43.343} lng={30.337844} size={24} />
+          </GoogleMapReact>
+        </div>
       </Desktop>
-
-      {/* <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
-        defaultCenter={initLocation.center}
-        defaultZoom={initLocation.zoom}
-        yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-      >
-        <RiMapPinUserFill body lat={viewableAccountData.location.lat} lng={viewableAccountData.location.lng} size={24} />
-      </GoogleMapReact> */}
       <Mobile>
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
+          defaultCenter={initLocation.center}
+          defaultZoom={initLocation.zoom}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+        >
+          <RiMapPinUserFill body lat={43.343} lng={30.337844} size={24} />
+        </GoogleMapReact>
         <BottomSheet
           open={open}
           // onDismiss={onDismiss}
