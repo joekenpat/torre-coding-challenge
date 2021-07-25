@@ -1,0 +1,26 @@
+.rep_stat {
+  margin-left: 0.5em;
+  width: 100%;
+}
+
+.rep_stat > p {
+  color: rgb(37 58 113);
+  font-size: 0.9em;
+  font-weight: 550;
+  margin-bottom: 0;
+}
+
+.rep_stat_icon {
+  background-color: rgb(255 242 238);
+  color: rgb(255 136 69);
+  border-radius: 0.4em;
+  padding: 0.5em;
+}
+
+.rep_progress {
+  height: 0.5em;
+  background-color: rgb(226 232 253);
+}
+.rep_progress_bar {
+  background-color: rgb(255 136 69);
+}
