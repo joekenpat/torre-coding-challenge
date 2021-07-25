@@ -1,8 +1,9 @@
 import GoogleMapReact from "google-map-react";
 import React, { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Container, ListGroup } from "react-bootstrap";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
+import MobileAccountList from "./components/MobileAccountList";
 import SearchBox from "./components/SearchBox";
 import gs from "./css/main.module.css";
 
@@ -11,6 +12,10 @@ const handleApiLoaded = (map, maps) => {
 };
 
 function App() {
+  const [availAccounts, setAvailAccounts] = useState([]);
+  const retrieveAvailAccounts = (accounts) => {
+    setAvailAccounts([...accounts]);
+  };
   const [open, setOpen] = useState(false);
   const [initLocation, setInitLocation] = useState({
     center: {
@@ -19,7 +24,6 @@ function App() {
     },
     zoom: 11,
   });
-
   const prepareInitPosition = (position) => {
     setInitLocation({
       center: {
@@ -59,13 +63,10 @@ function App() {
           maxHeight * 0.8,
         ]}
         expandOnContentDrag={true}
-        header={SearchBox()}
+        header={<SearchBox sendAvailAccounts={retrieveAvailAccounts} />}
         blocking={false}
       >
-        Lorem ipsum sit amet, consectetur adipisicing elit. Laboriosam molestias
-        quis nostrum minus cupiditate nisi, eveniet animi blanditiis
-        reprehenderit veniam natus saepe incidunt perspiciatis. Blanditiis
-        debitis temporibus dolores nisi ipsa.
+        <MobileAccountList accounts={availAccounts} />
       </BottomSheet>
     </div>
   );

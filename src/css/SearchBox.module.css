@@ -1,12 +1,12 @@
 .custom_left {
   border: 0;
-  background-color: rgb(246 250 255);
+  background-color: rgb(255 242 238);
   border-top-left-radius: 1em !important;
   border-bottom-left-radius: 1em !important;
 }
 .custom_right {
   border: 0;
-  background-color: rgb(246 250 255);
+  background-color: rgb(255 242 238);
   border-top-right-radius: 1em !important;
   border-bottom-right-radius: 1em !important;
 }
@@ -23,5 +23,31 @@ select.custom_right {
 select.custom_left:hover,
 select.custom_right:hover {
   box-shadow: none;
-  background-color: rgb(246 250 255);
+  background-color: rgb(255 242 238);
+}
+.filter_box {
+  background-color: rgb(255 242 238);
+  border-radius: 1em !important;
+}
+.filter_box select {
+  background-color: rgb(255 242 238);
+  border: 0;
+}
+.filter_box select:first-of-type {
+  border: 0;
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+.filter_box select:focus {
+  border: 0;
+  box-shadow: none !important;
+  background-color: rgb(255 242 238);
+}
+
+.filter_button {
+  color: rgb(255 136 69);
+  border:0;
+  background-color: rgb(255 136 69);
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
 }

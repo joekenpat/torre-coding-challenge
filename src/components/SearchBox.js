@@ -1,8 +1,8 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
+import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
 import { RiSearch2Line } from "react-icons/ri";
 import ls from "../css/SearchBox.module.css";
-import Aggregator from "../models/Aggregator";
 
 const searchData = ({ type, value }) => {
   if (type === "skill") {
@@ -55,8 +55,29 @@ const searchData = ({ type, value }) => {
   }
 };
 
-export default function SearchBox() {
-  const [aggregators] = useState(Object.keys(Aggregator));
+const prepareAccountsData = (data) => {
+  if (Array.isArray(data))
+    return data.map((pd) => ({
+      name: pd.name,
+      headline: pd.professionalHeadline,
+      avatarUrl: pd.picture,
+      compensation: pd.compensations.employee || pd.compensations.employee,
+      skills: pd.skills
+        .sort((a, b) => parseInt(b.weight) - parseInt(a.weight))
+        .slice(0, 2)
+        .map((x) => x.name),
+      remoteWorking: pd.remoter,
+      username: pd.username,
+      weight: pd.weight,
+    }));
+  return [];
+};
+
+export default function SearchBox({ sendAvailAccounts }) {
+  const [loading, setLoading] = useState(false);
+  const [aggregatorData, setAggregatorData] = useState({});
+  const [aggregators, setAggregators] = useState(Object.keys(aggregatorData));
+  const [filterData, setFilterData] = useState({ and: [] });
   const aggMap = {
     opento: "Employment Type",
     remoter: "Works Remotely",
@@ -71,19 +92,55 @@ export default function SearchBox() {
   const handleFilterValue = (selected) => {
     setSearchFilter({ ...searchFilter, value: selected });
   };
+  const handleFilterButton = () => {
+    setFilterData({
+      and: [...filterData.and, searchData({ ...searchFilter })],
+    });
+    loadData();
+  };
+  const loadData = () => {
+    if (!filterData.and) {
+      return;
+    }
+    setLoading(true);
+    axios({
+      method: "POST",
+      url: "https://search.torre.co/people/_search",
+      params: {
+        offset: 0,
+        size: 10,
+        aggregate: true,
+        limit: 20,
+      },
+      data: filterData,
+      config: { headers: { Accept: "application/json" } },
+    })
+      .then((res) => {
+        setAggregatorData(res.data.aggregators);
+        sendAvailAccounts(prepareAccountsData(res.data.results));
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response);
+        } else if (err.request) {
+          console.log(err.request);
+        } else {
+          console.log("Error", err.message);
+        }
+        setLoading(false);
+      });
+  };
+  useEffect(() => {
+    setAggregators(Object.keys(aggregatorData));
+  }, [aggregatorData]);
   useEffect(() => {
     if (!searchFilter.type) {
       return;
     }
-    setAggregatorValue(Aggregator[searchFilter.type].map((x) => x.value));
-  }, [searchFilter.type]);
-
-  useEffect(() => {
-    if (!searchFilter.value) {
-      return;
-    }
-    console.log(searchData({ ...searchFilter }));
-  }, [searchFilter.value, searchFilter]);
+    setAggregatorValue(aggregatorData[searchFilter.type].map((x) => x.value));
+  }, [searchFilter.type, aggregatorData]);
+  useEffect(loadData, []);
   return (
     <div>
       <InputGroup className="mb-2">
@@ -95,37 +152,41 @@ export default function SearchBox() {
           placeholder="Search for Programmers"
         />
       </InputGroup>
-      <Col>
-        <Row className={`g-1`}>
-          <Col>
-            <Form.Select
-              value={searchFilter.type}
-              onChange={(x) => handleFilterBy(x.target.value)}
-              className={`${ls.custom_left}`}
-            >
-              <option value="">Filter By</option>
-              {aggregators.map((agg, i) => (
-                <option value={agg} key={"agg_" + i}>
-                  {aggMap[agg]}
-                </option>
-              ))}
-            </Form.Select>
-          </Col>
-          <Col>
-            <Form.Select
-              value={searchFilter.value}
-              onChange={(e) => handleFilterValue(e.target.value)}
-              className={`${ls.custom_right}`}
-            >
-              <option>Values</option>
-              {aggregatorValue.map((aggV, i) => (
-                <option value={aggV} key={"aggV_" + i}>
-                  {aggV}
-                </option>
-              ))}
-            </Form.Select>
-          </Col>
-        </Row>
+      <Col className={`${ls.filter_box}`}>
+        <InputGroup>
+          <Form.Select
+            disabled={loading}
+            value={searchFilter.type}
+            onChange={(x) => handleFilterBy(x.target.value)}
+          >
+            <option value="">Filter By</option>
+            {aggregators.map((agg, i) => (
+              <option value={agg} key={"agg_" + i}>
+                {aggMap[agg]}
+              </option>
+            ))}
+          </Form.Select>
+          <Form.Select
+            disabled={loading}
+            value={searchFilter.value}
+            onChange={(e) => handleFilterValue(e.target.value)}
+          >
+            <option>Options</option>
+            {aggregatorValue.map((aggV, i) => (
+              <option value={aggV} key={"aggV_" + i}>
+                {aggV}
+              </option>
+            ))}
+          </Form.Select>
+          <Button
+            size="sm"
+            className={`${ls.filter_button}`}
+            onClick={handleFilterButton}
+            disabled={loading}
+          >
+            <RiSearch2Line size={22} color="#f6faff" />
+          </Button>
+        </InputGroup>
       </Col>
     </div>
   );
