@@ -1,0 +1,8 @@
+2021-07-25 17:40:20 +0100|bd99fad|joekenpat|got the listing of data in both mobile and desktop working
+2021-07-25 12:03:28 +0100|345e8dc|joekenpat|fetching and displaying of possible hires
+2021-07-24 17:39:09 +0100|1736ed3|joekenpat|completed the search data  generator for API
+2021-07-24 16:25:40 +0100|7ac93c7|joekenpat|making the filter system for the people search api
+2021-07-23 21:47:16 +0100|8619680|joekenpat|initialized google map and load user geolocation
+2021-07-23 19:51:56 +0100|09a5b91|joekenpat|started scafold for APP bottom sheet
+2021-07-23 13:48:09 +0100|81e3f09|joekenpat|initial project setup
+2021-07-23 08:44:14 +0100|44e56f6|joekenpat|Initialize project using Create React App
